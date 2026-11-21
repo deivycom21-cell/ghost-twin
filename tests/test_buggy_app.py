@@ -59,5 +59,5 @@ def test_api_bugs(buggy_app):
 def test_crash_stops_server(buggy_app):
     get(buggy_app.url + "/crash")
     buggy_app.thread.join(timeout=5)
-    with pytest.raises(urllib.error.URLError):
+    with pytest.raises(OSError):  # URLError or ConnectionResetError, depending on timing
         urllib.request.urlopen(buggy_app.url + "/", timeout=2)
