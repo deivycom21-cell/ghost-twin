@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ghost-twin · live</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👻</text></svg>">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">👻</span> ghost-twin <span class="muted" id="version"></span></div>
+    <div class="conn"><span class="dot" id="conn-dot"></span><span id="conn-text">connecting…</span></div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-head">
+        <h2>Runs</h2>
+        <label class="follow"><input type="checkbox" id="follow" checked> follow live</label>
+      </div>
+      <ul id="runs" class="runs"></ul>
+    </aside>
+
+    <main class="main">
+      <section id="empty" class="empty">
+        <div class="empty-ghost">👻</div>
+        <p>No runs yet.</p>
+        <code>ghost-twin attack http://localhost:3000 --users 4 --duration 60s</code>
+      </section>
+
+      <section id="run" class="hidden">
+        <div class="run-head">
+          <div>
+            <div class="run-title"><span id="run-target"></span> <span id="run-status" class="badge"></span></div>
+            <div class="muted" id="run-meta"></div>
+          </div>
+          <div class="actions">
+            <button id="copy-report" class="btn">Copy BUG_REPORT.md</button>
+            <a id="dl-report" class="btn ghost" download="BUG_REPORT.md">Download</a>
+          </div>
+        </div>
+
+        <div class="sev-row" id="sev-row"></div>
+
+        <h3>Agents</h3>
+        <div id="agents" class="agents"></div>
+
+        <div class="split">
+          <div class="panel">
+            <h3>Bugs <span class="muted" id="bug-count"></span></h3>
+            <ul id="bugs" class="bugs"></ul>
+          </div>
+          <div class="panel">
+            <h3>Live feed</h3>
+            <ol id="feed" class="feed"></ol>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="drawer" class="drawer hidden" role="dialog" aria-modal="true">
+    <div class="drawer-card">
+      <button class="close" id="drawer-close" aria-label="Close">✕</button>
+      <div id="drawer-body"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

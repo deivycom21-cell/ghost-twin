@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ghost-twin runtime data (SQLite, screenshots, videos, generated reports)
+.ghost-twin/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.webm
+_tmp_video/
+BUG_REPORT.md
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
