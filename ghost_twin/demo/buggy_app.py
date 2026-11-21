@@ -87,6 +87,7 @@ class BuggyApp:
         self.server: ThreadingHTTPServer | None = None
         self.thread: threading.Thread | None = None
         self.crashed = False
+        self._stopped = False
 
     @property
     def url(self) -> str:
@@ -107,12 +108,14 @@ class BuggyApp:
         return self
 
     def stop(self) -> None:
-        if self.server and not self.crashed:
+        self.crashed = True  # open keep-alive connections stop being served too
+        if self.server and not self._stopped:
+            self._stopped = True
             self.server.shutdown()
             self.server.server_close()
-        self.crashed = True
 
     def crash(self) -> None:
+        self.crashed = True
         threading.Thread(target=self.stop, daemon=True).start()
 
     def __enter__(self) -> BuggyApp:
@@ -128,6 +131,12 @@ class _Handler(BaseHTTPRequestHandler):
 
     def log_message(self, *args) -> None:  # keep test output clean
         pass
+
+    def handle_one_request(self) -> None:
+        if self.app.crashed:  # a dead process doesn't answer on old sockets either
+            self.close_connection = True
+            return
+        super().handle_one_request()
 
     # ------------------------------------------------------------------ helpers
     def send(self, status: int, body: bytes | str, ctype: str = "text/html; charset=utf-8") -> None:

@@ -23,7 +23,9 @@ async def health_monitor(url: str, interval: float, stop_event: asyncio.Event,
                          on_down: Callable[[str], Awaitable[None]]) -> None:
     """Poll ``url``; call ``on_down`` after 2 refused connections or 3 timeouts in a row."""
     refused = timeouts = 0
-    async with httpx.AsyncClient(timeout=10, trust_env=False) as client:
+    # Fresh connection per check: a reused keep-alive socket can outlive a dead listener.
+    limits = httpx.Limits(max_keepalive_connections=0)
+    async with httpx.AsyncClient(timeout=10, trust_env=False, limits=limits) as client:
         while not stop_event.is_set():
             try:
                 await client.get(url)
